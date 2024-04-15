@@ -1,5 +1,6 @@
 "use server";
 
+import db from "../db/setupDB";
 import { TwitterDataModel } from "../db/token.schema";
 import oauth from "./CollectAuthTokens/OAuthApp";
 
@@ -41,6 +42,8 @@ async function writeTweet({ oauth_token, oauth_token_secret }, tweet) {
 }
 
 async function sendTweetAction(text) {
+  db();
+
   let responseArray = [];
   let screenNames = [];
 

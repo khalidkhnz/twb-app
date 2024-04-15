@@ -24,9 +24,10 @@ async function requestToken() {
     });
     const body = await request.text();
 
-    return Object.fromEntries(new URLSearchParams(body));
+    return { success: true, ...Object.fromEntries(new URLSearchParams(body)) };
   } catch (error) {
     console.error("Error:", error);
+    return { success: false, error: error };
   }
 }
 
@@ -47,15 +48,17 @@ async function accessToken({ oauth_token, oauth_secret }, verifier) {
       },
     });
     const body = await request.text();
-    return Object.fromEntries(new URLSearchParams(body));
+    return { success: true, ...Object.fromEntries(new URLSearchParams(body)) };
   } catch (error) {
     console.error("Error:", error);
+    return { success: false, error: error };
   }
 }
 
 async function requestTokenAction() {
   const oAuthRequestToken = await requestToken();
   return JSON.stringify({
+    success: oAuthRequestToken.success,
     token: oAuthRequestToken.oauth_token,
     oAuthRequestToken: oAuthRequestToken,
   });

@@ -3,7 +3,6 @@ require("dotenv").config();
 import mongoose from "mongoose";
 
 const URI = process.env.MONGO_URI;
-// const URI = process.env.MONGO_URI_LOCAL || "mongodb://localhost:27017/tajtest";
 
 if (!URI) throw new Error("Please add your Mongo URI to .env");
 

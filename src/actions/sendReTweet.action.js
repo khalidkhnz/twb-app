@@ -1,5 +1,6 @@
 "use server";
 
+import db from "../db/setupDB";
 import { TwitterDataModel } from "../db/token.schema";
 import oauth from "./CollectAuthTokens/OAuthApp";
 
@@ -42,6 +43,7 @@ async function reTweet({ oauth_token, oauth_token_secret, user_id }, tweetId) {
 }
 
 export async function sendReTweetAction(tweetId) {
+  db();
   let responseArray = [];
   let screenNames = [];
 
@@ -59,7 +61,12 @@ export async function sendReTweetAction(tweetId) {
     // Wait for all promises to resolve
     await Promise.all(tweetPromises);
 
-    return JSON.stringify({ sentReTweet: tweetId, responseArray, screenNames });
+    return JSON.stringify({
+      success: true,
+      sentReTweet: tweetId,
+      responseArray,
+      screenNames,
+    });
   } catch (error) {
     console.error("Error:", error);
     return JSON.stringify({ success: false, message: error.message });

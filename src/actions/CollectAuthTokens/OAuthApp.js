@@ -1,5 +1,3 @@
-"use server";
-
 require("dotenv").config();
 
 import OAuth from "oauth-1.0a";
