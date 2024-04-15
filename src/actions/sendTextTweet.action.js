@@ -42,7 +42,7 @@ async function writeTweet({ oauth_token, oauth_token_secret }, tweet) {
 }
 
 async function sendTweetAction(text) {
-  db();
+  await db();
 
   let responseArray = [];
   let screenNames = [];

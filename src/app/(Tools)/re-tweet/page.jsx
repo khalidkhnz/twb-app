@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { useEffect } from "react";
 
-const page = () => {
+const Page = () => {
   const [tweetId, setTweetId] = useState("");
 
   const [allowed, setAllowed] = useState(false);
@@ -66,4 +66,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

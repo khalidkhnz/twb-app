@@ -43,7 +43,7 @@ async function reTweet({ oauth_token, oauth_token_secret, user_id }, tweetId) {
 }
 
 export async function sendReTweetAction(tweetId) {
-  db();
+  await db();
   let responseArray = [];
   let screenNames = [];
 

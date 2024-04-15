@@ -180,17 +180,18 @@ const Home = () => {
           <input
             type="text"
             style={{ padding: "8px" }}
+            className="text-black"
             value={pin}
             onChange={(e) => setPin(e.target.value)}
             placeholder="PIN"
           />
           <button
             style={{
-              background: "#90EE90",
               padding: "20px",
-              marginTop: "5px",
+              marginTop: "8px",
               borderRadius: "8px",
             }}
+            className="bg-green-600"
             onClick={handleVerifyPin}
           >
             Verify and get Access Token
