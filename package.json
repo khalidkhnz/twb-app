@@ -1,17 +1,28 @@
 {
-  "name": "final-twitter-bot",
+  "name": "Automation Dashboard",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "next build && next start"
   },
   "dependencies": {
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "fs": "^0.0.1-security",
+    "mongoose": "^8.3.0",
+    "next": "14.2.1",
+    "oauth-1.0a": "^2.2.6",
+    "querystring": "^0.2.1",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.1"
+    "react-open-app": "^1.0.3",
+    "readline": "^1.3.0",
+    "sonner": "^1.4.41",
+    "url": "^0.11.3"
   },
   "devDependencies": {
     "typescript": "^5",
