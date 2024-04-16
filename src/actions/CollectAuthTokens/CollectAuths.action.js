@@ -9,7 +9,7 @@ async function requestToken() {
   try {
     const requestTokenURL =
       "https://api.twitter.com/oauth/request_token?oauth_callback=oob&x_auth_access_type=write";
-    const authHeader = oauth.toHeader(
+    const authHeader = await oauth.toHeader(
       oauth.authorize({
         url: requestTokenURL,
         method: "POST",
@@ -34,7 +34,7 @@ async function requestToken() {
 async function accessToken({ oauth_token, oauth_secret }, verifier) {
   try {
     const url = `https://api.twitter.com/oauth/access_token?oauth_verifier=${verifier}&oauth_token=${oauth_token}`;
-    const authHeader = oauth.toHeader(
+    const authHeader = await oauth.toHeader(
       oauth.authorize({
         url,
         method: "POST",
