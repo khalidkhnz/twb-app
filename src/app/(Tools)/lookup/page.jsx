@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { userLookupUsingUsername } from "../../../actions/userLookup.action";
 
-const page = () => {
+const Page = () => {
   const [username, setUsername] = useState("");
   const [res, setRes] = useState(null);
 
@@ -40,4 +40,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
