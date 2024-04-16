@@ -4,14 +4,17 @@ import db from "../db/setupDB";
 import { TwitterDataModel } from "../db/token.schema";
 import oauth from "./CollectAuthTokens/OAuthApp";
 
-async function reTweet({ oauth_token, oauth_token_secret, user_id }, tweetId) {
+async function reTweet(
+  { oauth_token, oauth_token_secret, user_id, screen_name },
+  tweetId
+) {
   const token = {
     key: oauth_token,
     secret: oauth_token_secret,
   };
   const url = `https://api.twitter.com/2/users/${user_id}/retweets`;
 
-  const headers = oauth.toHeader(
+  const headers = await oauth.toHeader(
     oauth.authorize(
       {
         url,
@@ -36,6 +39,17 @@ async function reTweet({ oauth_token, oauth_token_secret, user_id }, tweetId) {
       },
     });
     const body = await request.json();
+
+    console.log({
+      action: "Retweet",
+      screen_name: screen_name,
+      tweet: tweetId,
+      url: url,
+      token: token,
+      headers: headers,
+      response: body,
+    });
+
     return JSON.stringify(body);
   } catch (error) {
     console.error("Error:", error);

@@ -3,23 +3,22 @@
 import db from "../db/setupDB";
 import { TwitterDataModel } from "../db/token.schema";
 import oauth from "./CollectAuthTokens/OAuthApp";
-import { userLookupUsingUsername } from "./userLookup.action";
 
-async function follow(
+async function userLookupByUsername(
   { oauth_token, oauth_token_secret, user_id, screen_name },
-  userId
+  username
 ) {
   const token = {
     key: oauth_token,
     secret: oauth_token_secret,
   };
-  const url = `https://api.twitter.com/2/users/${user_id}/following`;
+  const url = `https://api.twitter.com/2/users/by/username/${username}`;
 
   const headers = await oauth.toHeader(
     oauth.authorize(
       {
         url,
-        method: "POST",
+        method: "GET",
       },
       token
     )
@@ -27,10 +26,7 @@ async function follow(
 
   try {
     const request = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        target_user_id: userId,
-      }),
+      method: "GET",
       responseType: "json",
       headers: {
         Authorization: headers["Authorization"],
@@ -42,9 +38,9 @@ async function follow(
     const body = await request.json();
 
     console.log({
-      action: "Follow",
+      action: "Lookup",
       screen_name: screen_name,
-      target_user_id: userId,
+      target_username: username,
       url: url,
       token: token,
       headers: headers,
@@ -57,35 +53,23 @@ async function follow(
   }
 }
 
-export async function sendFollowAction(username) {
+export async function userLookupUsingUsername(username) {
   await db();
-  let responseArray = [];
-  let screenNames = [];
-
-  let userLookupData = await userLookupUsingUsername(username);
-  userLookupData = await JSON.parse(userLookupData);
-
-  let userId = userLookupData?.lookupUserId;
 
   try {
-    let dbTokens = await TwitterDataModel.find({});
+    let dbTokens = await TwitterDataModel.aggregate([{ $sample: { size: 1 } }]);
 
-    // Create an array of promises using map
-    const followPromises = dbTokens.map(async (token) => {
-      const messageResponse = await follow(token, userId);
-      responseArray.push(messageResponse);
-      screenNames.push(token.screen_name);
-      console.log("Using Auth : ", token.screen_name);
-    });
+    const messageResponse = await userLookupByUsername(dbTokens[0], username);
 
-    // Wait for all promises to resolve
-    await Promise.all(followPromises);
+    let userIdFromUsername = await JSON.parse(messageResponse);
+
+    userIdFromUsername = userIdFromUsername?.data?.id;
 
     return JSON.stringify({
       success: true,
-      sentFollow: { userId, username },
-      responseArray,
-      screenNames,
+      usedScreenName: dbTokens[0]?.screen_name,
+      username: username,
+      lookupUserId: userIdFromUsername,
     });
   } catch (error) {
     console.error("Error:", error);
